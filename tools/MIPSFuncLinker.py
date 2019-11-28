@@ -5,18 +5,6 @@
 import sys
 import binascii
 regList = ['r0','at','v0','v1','a0','a1','a2','a3','t0','t1','t2','t3','t4','t5','t6','t7','s0','s1','s2','s3','s4','s5','s6','s7','t8','t9','k0','k1','gp','sp','s8','ra']
-r0=0
-at=1
-v0,v1=2,3
-a0,a1,a2,a3=4,5,6,7
-t0,t1,t2,t3,t4,t5,t6,t7=8,9,10,11,12,13,14,15
-s0,s1,s2,s3,s4,s5,s6,s7=16,17,18,19,20,21,22,23
-t8,t9=24,25
-k0,k1=26,27
-gp=28
-sp=29
-s8=30
-ra=31
 GPRs = {}
 for i in range(0,32):
 	GPRs[i]=0x00000000
@@ -42,7 +30,7 @@ def addressFromLW(imm,reg):
 	return hex(hi+imm)
 
 addr = 0x80245ff8
-jrTimer=-1
+lineCount=0
 funcName=''
 optionalComment=''
 with open(sys.argv[2]) as asmFile:
@@ -65,12 +53,12 @@ with open(sys.argv[2]) as asmFile:
 			funcName=funcList[str(hex(addr))]
 			optionalComment='\t; '+funcName
 			funcName=''
-		if tokens[0] == 'jr' and tokens[1] == 'RA':
-			jrTimer=1
-		print("/*"+str(hex((addr-0x80245000))),str(hex(addr))+"*/",' '.join(tokens)+optionalComment)
-		addr+=0x0004
-		if jrTimer==0:
 			print() # Split functions by newline
-			print(".org",hex(addr))
-		jrTimer-=1
+			print(".org",hex(addr+0x0004))
+		if lineCount>2:
+			print("/*"+str(hex((addr-0x80245000))),str(hex(addr))+"*/",' '.join(tokens)+optionalComment)
+		else:
+			print(' '.join(tokens)+optionalComment)
+		addr+=0x0004
 		optionalComment=''
+		lineCount+=1
