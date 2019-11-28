@@ -20,7 +20,9 @@ ra=31
 GPRs = {}
 for i in range(0,32):
 	GPRs[i]=0x00000000
-
+print(".relativeinclude on")
+print("\t.include \"armipsLinks.asm\"")
+print(".relativeinclude off")
 # Gets function list
 funcList={}
 with open(sys.argv[1],'r') as funcFile:
@@ -66,8 +68,9 @@ with open(sys.argv[2]) as asmFile:
 		if tokens[0] == 'jr' and tokens[1] == 'RA':
 			jrTimer=1
 		print("/*"+str(hex((addr-0x80245000))),str(hex(addr))+"*/",' '.join(tokens)+optionalComment)
+		addr+=0x0004
 		if jrTimer==0:
 			print() # Split functions by newline
-		addr+=0x0004
+			print(".org",hex(addr))
 		jrTimer-=1
 		optionalComment=''
