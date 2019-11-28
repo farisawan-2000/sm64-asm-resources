@@ -1,5 +1,5 @@
 # sm64-asm-resources
-Various ASM resources and tools for Super Mario 64, including a fully labeled disassembly of the main code segment
+Various ASM resources and tools for Super Mario 64, including a **fully labeled disassembly** of the main code segment
 
 
 # What's Included
@@ -10,4 +10,4 @@ Various ASM resources and tools for Super Mario 64, including a fully labeled di
 Various Python tools were developed for this project, including:
 - Converting the original checksum_area_11_9.txt file into an assembler-friendly format
 - Converting the linker map for Super Mario 64 into an assembler-friendly symbols file
-- Converting the above two files into one single file which smartly replaces addresses with their respective function and variable symbols
+- **MIPSFuncLinker.py** - Converting the above two files into one single file which smartly replaces addresses with their respective function and variable symbols
