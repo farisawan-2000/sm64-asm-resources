@@ -8,6 +8,6 @@ Various ASM resources and tools for Super Mario 64, including a **fully labeled 
 
 ## Tools
 Various Python tools were developed for this project, including:
-- Converting the original checksum_area_11_9.txt file into an assembler-friendly format
+- Converting the original [checksum_area_11_9.txt](https://sites.google.com/site/messiaen64/checksum-area-disassembly-big) file into an assembler-friendly format
 - Converting the linker map for Super Mario 64 into an assembler-friendly symbols file
 - **MIPSFuncLinker.py** - Converting the above two files into one single file which smartly replaces addresses with their respective function and variable symbols
