@@ -10,7 +10,7 @@ for i in range(0,32):
 	GPRs[i]=0x00000000
 print(".relativeinclude on")
 print("\t.include \"armipsLinks.asm\"")
-print(".relativeinclude off")
+print(".relativeinclude off\n\n")
 # Gets function list
 funcList={}
 with open(sys.argv[1],'r') as funcFile:
@@ -29,6 +29,8 @@ def addressFromLW(imm,reg):
 	hi *= 0x10000
 	return hex(hi+imm)
 
+funcString=''
+funcLength = 0x00
 addr = 0x80245ff8
 lineCount=0
 funcName=''
@@ -53,12 +55,20 @@ with open(sys.argv[2]) as asmFile:
 			funcName=funcList[str(hex(addr))]
 			optionalComment='\t; '+funcName
 			funcName=''
+			funcString+=".endarea"
+			if lineCount>2:
+				print(".area",hex(funcLength))
+			print(funcString)
+			funcString=''
+			funcLength=0
+			# print(".endarea")
 			print() # Split functions by newline
-			print(".org",hex(addr+0x0004))
-		if lineCount>2:
-			print("/*"+str(hex((addr-0x80245000))),str(hex(addr))+"*/",' '.join(tokens)+optionalComment)
+			print(".org "+hex(addr))
+		if lineCount>=2:
+			funcString+="/*"+str(hex((addr-0x80245000)))+" "+str(hex(addr))+"*/ "+' '.join(tokens)+optionalComment+"\n"
 		else:
-			print(' '.join(tokens)+optionalComment)
+			funcString+=' '.join(tokens)+optionalComment+"\n"
 		addr+=0x0004
 		optionalComment=''
 		lineCount+=1
+		funcLength+=0x0004
